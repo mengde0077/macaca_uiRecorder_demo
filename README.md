@@ -1,4 +1,4 @@
-UI Recorder test sample project
+UI Recorder test demo
 ================
 
 It's a UI Recorder test sample project.
@@ -12,6 +12,16 @@ How to run test case?
 
 1. npm install
 2. source run.sh ( Linux|Mac ) or run.bat ( Windows )
+
+如：
+录制：
+uirecorder start --mobile sample/test.IOS3.js
+
+回放：
+source run.sh sample/test.IOS3.js
+
+执行固化用例：
+source run.sh testsuite/test.B2C.3.0.4.js
 
 How to dock jenkins?
 ================
@@ -27,11 +37,9 @@ How to dock jenkins?
 
     > HTML: reports/
 
-录制：
-uirecorder start --mobile sample/test.IOS3.js
 
-回放：
-source run.sh sample/test.IOS3.js
 
-执行固化用例：
-source run.sh testsuite/test.B2C.3.0.3.js
+
+
+
+
