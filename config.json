@@ -1,0 +1,18 @@
+{
+    "webdriver": {
+        "host": "127.0.0.1",
+        "port": "4444",
+        "browsers": "chrome, ie 11"
+    },
+    "vars": {
+        "aaa": "11111"
+    },
+    "recorder": {
+        "pathAttrs": "data-id,data-name,type,data-type,role,data-role,data-value",
+        "attrValueBlack": "",
+        "hideBeforeExpect": ""
+    },
+    "other": {
+        "reuse": "3"
+    }
+}
