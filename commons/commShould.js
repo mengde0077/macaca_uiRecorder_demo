@@ -2,7 +2,7 @@
 * @Author: caolinming
 * @Date:   2017-03-24 09:12:34
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-04-24 16:57:05
+* @Last Modified time: 2017-04-25 16:22:57
 * 通用 元素断言 方法
 */
 
@@ -156,7 +156,7 @@ exports.elemCanFind = function (textAffirm){
 };
 
 /*
- *等待 对象的出现，获取对象的 text 文本信息，进行 包含 断言
+ * 等待 对象的出现，获取对象的 text 文本信息，进行 包含 断言
  * @param androidElem 安卓对应的元素对象的获取方式 及 值 
  * @param iosElem ios对应的元素对象的获取方式 及 值 
  * @param elementDesc 控件描述文案
@@ -239,29 +239,52 @@ exports.shouldElemIsNotShecked = function (parameter){
     });
 };
 
+
+
 /*
- *等待 对象的出现,获取对象的文本信息，并打印出来  -- 好像没啥用
+ * 断言：查找 元素对象 的个数为 n 个
  * @param androidElem 安卓对应的元素对象的获取方式 及 值 
  * @param iosElem ios对应的元素对象的获取方式 及 值 
  * @param elementDesc 控件描述文案
  * @param waitTime 等待元素对象刷新的 等待时间
- *Android iOS Web(WebView). iOS: 'isVisible', 'isAccessible', 'isEnabled', 'type', 'label', 'name', 'value'
- * prop  的name 支持 Android：'selected', 'description', 'text' enabled、checkable、checked、clickable、focusable、focused、longClickable、scrollable
+ * @param N number 元素对象的个数
  */
-exports.getAndPrintProp = function (parameter){
+exports.shouldElemLenEqual = function (parameter, N){
     var androidElem = parameter.androidElem;
     var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
     var elementDesc = parameter.elementDesc;
     var waitTime = parameter.waitTime?parameter.waitTime:4000;
-    it('获取 : ' + elementDesc + ' 的文本值对象，', function (){
+    it('断言 : ' + elementDesc + ' 元素对象，在当前页面展示为 ' + N + ' 个', function (){
         if(platformName === 'Android'){
-            return driver.wait(androidElem, waitTime).prop('checked')
-            .should.deep.equal({ checked: true })
-            .then(text => {console.log(text)});  //打印在控制台
+            return driver.find(androidElem)
+            .should.have.length(N);
         }else{
-            return driver.wait(androidElem, waitTime).prop('name')
-            .should.deep.equal({ checked: true })
-            .then(text => {console.log(text)});  //打印在控制台
+            return driver.find(androidElem)
+            .should.have.length(N);
+        };
+    });
+};
+
+/*
+ * 断言：查找 元素对象 的个数大于 n 个
+ * @param androidElem 安卓对应的元素对象的获取方式 及 值 
+ * @param iosElem ios对应的元素对象的获取方式 及 值 
+ * @param elementDesc 控件描述文案
+ * @param waitTime 等待元素对象刷新的 等待时间
+ * @param N number 元素对象的个数
+ */
+exports.shouldElemLenAbove = function (parameter, N){
+    var androidElem = parameter.androidElem;
+    var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
+    var elementDesc = parameter.elementDesc;
+    var waitTime = parameter.waitTime?parameter.waitTime:4000;
+    it('断言 : ' + elementDesc + ' 元素对象，在当前页面展示为 ' + N + ' 个', function (){
+        if(platformName === 'Android'){
+            return driver.find(androidElem)
+            .should.have.length.above(N);
+        }else{
+            return driver.find(androidElem)
+            .should.have.length.above(N);
         };
     });
 };

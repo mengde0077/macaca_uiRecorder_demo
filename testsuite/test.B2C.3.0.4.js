@@ -9,23 +9,23 @@ function testcase(){
 
 
     // app安装完成，开始执行用例***************************
-    b2c_home.unloginDismissCouponTest();
-    b2c_home.unloginStatusToLoginTest();
-    b2c_order.unloginStatusToLoginTest();
-    b2c_mine.unloginStatusToLoginTest();
-    b2c_mine.userSettingTest();
-    b2c_goods.goodsListSwipeTest();
+    // b2c_home.unloginDismissCouponTest();
+    // b2c_home.unloginStatusToLoginTest();
+    // b2c_order.unloginStatusToLoginTest();
+    // b2c_mine.unloginStatusToLoginTest();
+    // b2c_mine.userSettingTest();
+    // b2c_goods.goodsListSwipeTest();
     b2c_goods.findGoodsByName();
-    b2c_goods.addCartTest();
-    b2c_goods.addCartTest2();   
+    // b2c_goods.addCartTest();
+    // b2c_goods.addCartTest2();   
     // ************登录后用例****************************
-    b2c_mine.loginTest();
-    b2c_mine.getUserInfo();
-    b2c_mine.loginStatusToLoginTest();
-    b2c_order.allOrderListTest();
+    // b2c_mine.loginTest();
+    // b2c_mine.getUserInfo();
+    // b2c_mine.loginStatusToLoginTest();
+    // b2c_order.allOrderListTest();
 
     // // ************退出登录****************************
-    b2c_mine.loginOffTest();
+    // b2c_mine.loginOffTest();
     
     // 用例执行结束**************************************
 }

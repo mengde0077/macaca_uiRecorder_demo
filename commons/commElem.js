@@ -2,7 +2,7 @@
 * @Author: caolinming
 * @Date:   2017-03-24 09:12:34
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-04-25 10:31:04
+* @Last Modified time: 2017-04-29 15:07:28
 * 通用 元素操作 方法
 */
 
@@ -10,6 +10,8 @@
 var chai = require("chai");
 var should = chai.should();
 var co = require('co');
+var eventproxy = require('eventproxy');
+
 var commBrowser = require("./commBrowser");
 
 var driver, testVars, platformName;
@@ -23,7 +25,7 @@ before(function(){
 });
 
 /*
- *等待 文本对象的出现
+ * 等待 文本对象的出现
  *
  */
 exports.waitText = function (text){
@@ -37,7 +39,7 @@ exports.waitText = function (text){
 };
 
 /*
- *等待 文本对象的出现，并点击该 文本按钮或者链接！
+ * 等待 文本对象的出现，并点击该 文本按钮或者链接！
  *
  */
 exports.clickText = function (text){
@@ -51,7 +53,7 @@ exports.clickText = function (text){
 };
 
 /*
- *等待 对象的出现
+ * 等待 对象的出现
  * @param androidElem 安卓对应的元素对象的获取方式 及 值 
  * @param iosElem ios对应的元素对象的获取方式 及 值 
  * @param elementDesc 控件描述文案
@@ -72,7 +74,7 @@ exports.waitElem = function (parameter){
 };
 
 /*
- *等待 对象的出现,获取对象的文本信息，并打印出来
+ * 等待 对象的出现,获取对象的文本信息，并打印出来
  * @param androidElem 安卓对应的元素对象的获取方式 及 值 
  * @param iosElem ios对应的元素对象的获取方式 及 值 
  * @param elementDesc 控件描述文案
@@ -98,7 +100,7 @@ exports.getAndPrintText = function (parameter){
 
 
 /*
- *等待 对象的出现,获取对象的rect信息，并打印出来
+ * 等待 对象的出现,获取对象的rect信息，并打印出来
  * @param androidElem 安卓对应的元素对象的获取方式 及 值 
  * @param iosElem ios对应的元素对象的获取方式 及 值 
  * @param elementDesc 控件描述文案
@@ -118,10 +120,126 @@ exports.getAndPrintRect = function (parameter){
     });
 };
 
+/*
+ * 等待 对象的出现,获取对象的rect信息，并打印出来
+ * @param androidElem 安卓对应的元素对象的获取方式 及 值 
+ * @param iosElem ios对应的元素对象的获取方式 及 值 
+ * @param elementDesc 控件描述文案
+ * @param waitTime 等待元素对象刷新的 等待时间
+ * 该方法为  for 循环 ，eventproxy for循环 、闭包、异步回调、promise、co、generator+co 等 模式的 练习方法！
+ */
+exports.findAndGetAllName = function (parameter){
+    var androidElem = parameter.androidElem;
+    var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
+    var elementDesc = parameter.elementDesc;
+    var waitTime = parameter.waitTime?parameter.waitTime:4000;
+    it('获取 : ' + elementDesc + ' 列表中的全部名称，', function (){
+        if(platformName === 'Android'){
+            var deferred = Promise.defer();
+            co(function * (){
+                var elem =  yield driver.find(androidElem);
+                var length = elem['length'];
+                var ep = new eventproxy();
+                // console.log(length);
+                // console.log(ep);
+                // console.log(elem);
+                // console.log('111');
+                ep.after('print goods name list', length, function (list){
+                    console.log(list);
+                    deferred.resolve();
+                });
+                // ep.all('text0', 'text1', function (text0, text1){
+                //     console.log(text0 + ',' + text1);
+                //     done();
+
+                // });
+                // elem.get(0).text().then(function (text){
+                //     console.log(text);
+                //     ep.emit('text0', text);
+                // });
+                // elem.get(1).text().then(function (text){
+                //     console.log(text);
+                //     ep.emit('text1', text);
+                // });
+                // driver.sleep(30000);
+                // console.log(n);
+                // yield driver.find(androidElem).get(0).text().then(text => {console.log('it :' + text);});
+                // yield driver.find(androidElem).get(1).text().then(text => {console.log('it :' + text);});
+                // yield driver.find(androidElem).get(2).text().then(text => {console.log('it :' + text);});
+                // yield driver.find(androidElem).get(3).text().then(text => {console.log('it :' + text);});
+                // yield driver.find(androidElem).get(4).text().then(text => {console.log('it :' + text);});
+                for (var i = 0; i < length; i++)
+                    {
+                        (function (i) {
+                            setTimeout(function () {
+                                // console.log(i);
+                                driver.find(androidElem).get(i).text().then(text =>{
+                                    // console.log(text);
+                                    ep.emit('print goods name list', text);
+                                });
+                                
+                            }, 240*i);
+                        })(i);
+                    };
+
+                // for (var i = 0; i < length; i++)
+                //     {
+                //         (function (i){
+                //         co(function * (){
+                //             console.log(i);
+                //             console.log(androidElem);
+                //             // driver.find(androidElem).get(1).text().then(text =>{console.log(text);});
+                //             var text = yield driver.find(androidElem).get(1).text();
+                //         });
+
+                //             ep.emit('print goods name list', text);
+                //             // driver.find(androidElem).get(i).text()
+                //             //     .then(function (text){
+                //             //         console.log('222');
+                //             //         console.log(i + ':' + text);
+                //             //         ep.emit('print goods name list', text);
+                //             //     });
+                //         })(i);
+                //     }
+                // for (var i = 0; i < length; i++)
+                //     {
+                //         (function (i){
+                //             console.log(i);
+                //             // console.log(androidElem);
+                //             driver.find(androidElem).get(i).text();
+                //                 // .text(function (text){
+                //                 //     console.log(i);
+                //                 //     console.log('it :' + text);
+                //                 //     ep.emit('print goods name list', text);
+                //                 // });
+                //         })(i);
+                //     };
+                // for (var i = 0; i < length; i++)
+                //     {
+                //         (function (i) {
+                //             console.log('11');
+                //             setTimeout(function (i) {
+                //                 console.log(i);
+                //                 ep.emit('print goods name list', i);
+                //             }, 100);
+                //         })(i);
+                //     };
+                
+            }).then(function(){
+                // console.log('done!');
+                console.log('');
+                // deferred.resolve();
+            });
+            return deferred.promise;
+        }else{
+            return driver.find(iosElem).then(_print);
+        };
+    });
+};
 
 
 /*
- *等待 对象的出现 ,拖拽 至指定 坐标
+ * 等待 对象的出现 ,拖拽 至指定 坐标
  * @param androidElem 安卓对应的元素对象的获取方式 及 值 
  * @param iosElem ios对应的元素对象的获取方式 及 值 
  * @param elementDesc 控件描述文案
@@ -143,7 +261,7 @@ exports.waitElemDragTo = function (parameter,index,x,y){
 };
 
 /*
- *等待 文本对象的出现 ,向指定 方向 拖拽
+ * 等待 文本对象的出现 ,向指定 方向 拖拽
  * @param waitTime 等待元素对象刷新的 等待时间
  * @param type 滑动的方向 'up'、down'、'right'、'left'
  * @param index 元素的位标 从 0 开始
@@ -174,8 +292,10 @@ exports.waitTextElemAndSwipe = function (text,type,times){
     });
 };
 
+
+
 /*
- *等待 对象的出现 ,向指定 方向 拖拽
+ * 等待 对象的出现 ,向指定 方向 拖拽
  * @param androidElem 安卓对应的元素对象的获取方式 及 值 
  * @param iosElem ios对应的元素对象的获取方式 及 值 
  * @param elementDesc 控件描述文案
@@ -259,7 +379,7 @@ exports.waitElemAndSwipeLastToFrist = function (parameter){
 };
 
 /*
- *等待 对象的出现，并点击 该对象 进行操作或跳转！
+ * 等待 对象的出现，并点击 该对象 进行操作或跳转！
  * @param androidElem 安卓对应的元素对象的获取方式 及 值 
  * @param iosElem ios对应的元素对象的获取方式 及 值 
  * @param elementDesc 控件描述文案
@@ -280,7 +400,7 @@ exports.waitAndClick = function (parameter){
 };
 
 /*
- *等待 列表对象的出现，并按给定的 位标 点击 该对象 进行操作或跳转！
+ * 等待 列表对象的出现，并按给定的 位标 点击 该对象 进行操作或跳转！
  * @param androidElem 安卓对应的元素对象的获取方式 及 值 
  * @param iosElem ios对应的元素对象的获取方式 及 值 
  * @param elementDesc 控件描述文案
@@ -330,7 +450,7 @@ exports.waitAndGetClick1 = function (parameter,name,parameter2){
 };
 
 /*
- *等待 对象的出现，并双击 该对象 进行操作或跳转！
+ * 等待 对象的出现，并双击 该对象 进行操作或跳转！
  * @param androidElem 安卓对应的元素对象的获取方式 及 值 
  * @param iosElem ios对应的元素对象的获取方式 及 值 
  * @param elementDesc 控件描述文案
@@ -394,7 +514,7 @@ exports.pinchIn = function (parameter){
 };
 
 /*
- *等待 元素对象的出现，长按该元素   --未测试
+ * 等待 元素对象的出现，长按该元素   --未测试
  * @param androidElem 安卓对应的元素对象的获取方式 及 值 
  * @param iosElem ios对应的元素对象的获取方式 及 值 
  * @param elementDesc 控件描述文案
@@ -415,7 +535,7 @@ exports.waitAndLongClick = function (parameter){
 };
 
 /*
- *等待 对象的出现 ,向指定 方向 拖拽  
+ * 等待 对象的出现 ,向指定 方向 拖拽  
  * @param par 元素的坐标信息
  * @param type 滑动的方向 'up'、down'、'right'、'left'
  * @param times 元素的位标

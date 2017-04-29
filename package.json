@@ -5,14 +5,15 @@
   "main": "",
   "dependencies": {
     "chai": "3.5.0",
+    "co": "^4.6.0",
+    "eventproxy": "^0.3.5",
     "jwebdriver": "2.1.1",
     "mocha": "3.1.2",
     "mocha-parallel-tests": "1.2.4",
     "mochawesome-uirecorder": "1.5.20",
     "selenium-standalone": "6.1.0"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "scripts": {
     "installdriver": "./node_modules/.bin/selenium-standalone install --drivers.firefox.baseURL=http://npm.taobao.org/mirrors/geckodriver --baseURL=http://npm.taobao.org/mirrors/selenium --drivers.chrome.baseURL=http://npm.taobao.org/mirrors/chromedriver --drivers.ie.baseURL=http://npm.taobao.org/mirrors/selenium",
     "server": "./node_modules/.bin/selenium-standalone start",

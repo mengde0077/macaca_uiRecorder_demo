@@ -30,10 +30,9 @@ exports.findGoodsByName = function(){
     commBrowser.testCaseDoc("将想要操作的商品移动到first位置");
     unitPage.clickGoods();
     goodsPage.clickCategoryXXSP();
-    goodsPage.swipeGoodsNameLastToFrist();   //将列表中最后一个商品移动到最前面
-    goodsPage.swipeGoodsName('down', 1);   //将第2个商品向下滑动
-
-    
+    goodsPage.findGoodsName();
+    // goodsPage.swipeGoodsNameLastToFrist();   //将列表中最后一个商品移动到最前面
+    // goodsPage.swipeGoodsName('down', 1);   //将第2个商品向下滑动    
 };
 
 exports.addCartTest = function(){

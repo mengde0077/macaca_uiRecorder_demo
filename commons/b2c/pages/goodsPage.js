@@ -2,7 +2,7 @@
 * @Author: caolinming
 * @Date:   2017-03-23 17:59:57
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-04-24 10:29:53
+* @Last Modified time: 2017-04-29 15:01:34
 * 超市 商品分类 页
 */
 
@@ -27,6 +27,8 @@ exports.clickCategoryTGBG = function (){commElem.clickText("糖果饼干");};
 
 exports.getGoodsNameProp = function (){commElem.getAndPrintProp(goodsPageUI.goodsNamePar);};
 exports.getGoodsNameSize = function (){commElem.getAndPrintRect(goodsPageUI.goodsNamePar);};
+exports.findGoodsName = function (){commElem.findAndGetAllName(goodsPageUI.goodsNamePar);};
+
 exports.swipeGoodsName = function (type, index){commElem.waitElemAndSwipe(goodsPageUI.goodsNamePar, type, index, 5);};
 exports.swipeGoodsNameLastToFrist = function (){
 	commElem.waitElemAndSwipeLastToFrist(goodsPageUI.goodsNamePar);
