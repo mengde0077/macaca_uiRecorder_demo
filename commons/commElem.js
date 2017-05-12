@@ -2,7 +2,7 @@
 * @Author: caolinming
 * @Date:   2017-03-24 09:12:34
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-04-29 15:07:28
+* @Last Modified time: 2017-05-08 16:33:06
 * 通用 元素操作 方法
 */
 
@@ -80,7 +80,7 @@ exports.waitElem = function (parameter){
  * @param elementDesc 控件描述文案
  * @param waitTime 等待元素对象刷新的 等待时间
  */
-exports.getAndPrintText = function (parameter){
+exports.getAndPrintText = function (parameter, callback){
     var androidElem = parameter.androidElem;
     var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
     var elementDesc = parameter.elementDesc;
@@ -88,10 +88,12 @@ exports.getAndPrintText = function (parameter){
     it('获取 : ' + elementDesc + ' 的文本值，', function (){
         if(platformName === 'Android'){
             return driver.wait(androidElem, waitTime).text()
-            .then(text => {console.log('文本值为： ' + text)});  //打印在控制台
+            .then(text => {console.log('文本值为： ' + text);
+                callback(text);});  //打印在控制台
         }else{
             return driver.wait(iosElem, waitTime).text()
-            .then(text => {console.log('文本值为： ' + text)});
+            .then(text => {console.log('文本值为： ' + text);
+                callback(text);});
         };
     });
 };
@@ -175,10 +177,11 @@ exports.findAndGetAllName = function (parameter){
                                 // console.log(i);
                                 driver.find(androidElem).get(i).text().then(text =>{
                                     // console.log(text);
-                                    ep.emit('print goods name list', text);
+                                    // var text1 = i + ':' + text;
+                                    ep.emit('print goods name list', i + ':' + text);
                                 });
                                 
-                            }, 240*i);
+                            }, 300*i);
                         })(i);
                     };
 
@@ -395,6 +398,57 @@ exports.waitAndClick = function (parameter){
             return driver.wait(androidElem, waitTime).sendElementActions('tap');
         }else{
             return driver.wait(iosElem, waitTime).sendElementActions('tap');
+        };
+    });
+};
+
+
+/*
+ * 等待 对象的出现，并点击 该对象 输入 text 查找
+ * @param androidElem 安卓对应的元素对象的获取方式 及 值 
+ * @param iosElem ios对应的元素对象的获取方式 及 值 
+ * @param elementDesc 控件描述文案
+ * @param waitTime 等待元素对象刷新的 等待时间
+ */
+exports.waitClickAndAjax = function (parameter, text){
+    var androidElem = parameter.androidElem;
+    var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
+    var elementDesc = parameter.elementDesc;
+    var waitTime = parameter.waitTime?parameter.waitTime:5000;
+    it('点击: ' + elementDesc + '输入：' + text + ' 后查找', function (){
+        if(platformName === 'Android'){
+            return driver.wait(androidElem, waitTime).sendElementActions('tap')
+            .sendKeys(_(text));
+            // .submit();  //搜索地址，这里采用的 ajax方式  不需要 submit
+        }else{
+            return driver.wait(iosElem, waitTime).sendElementActions('tap')
+            .sendKeys(_(text));
+            // .submit();
+        };
+    });
+};
+
+/*
+ * 等待 对象的出现，并点击 该对象 输入text 并提交
+ * @param androidElem 安卓对应的元素对象的获取方式 及 值 
+ * @param iosElem ios对应的元素对象的获取方式 及 值 
+ * @param elementDesc 控件描述文案
+ * @param waitTime 等待元素对象刷新的 等待时间
+ */
+exports.waitClickAndSubmit = function (parameter, text){
+    var androidElem = parameter.androidElem;
+    var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
+    var elementDesc = parameter.elementDesc;
+    var waitTime = parameter.waitTime?parameter.waitTime:5000;
+    it('点击: ' + elementDesc + '输入：' + text + ' 后提交', function (){
+        if(platformName === 'Android'){
+            return driver.wait(androidElem, waitTime).sendElementActions('tap')
+            .sendKeys(_(text))
+            .submit();  
+        }else{
+            return driver.wait(iosElem, waitTime).sendElementActions('tap')
+            .sendKeys(_(text))
+            .submit();
         };
     });
 };

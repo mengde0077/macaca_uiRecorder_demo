@@ -13,7 +13,16 @@ How to run test case?
 1. npm install
 2. source run.sh ( Linux|Mac ) or run.bat ( Windows )
 
+#录制官方app
+/Users/caolinming/Desktop/githubDir/macaca-sample/macaca-java-biz-sample/app/android-app-bootstrap.zip
+
 如：
+# 开启 Macaca 服务
+$ macaca server --port 4444 --verbose
+
+#打开元素查看器
+app-inspector -u f4301fe8
+
 录制：
 uirecorder start --mobile sample/test.IOS3.js
 

@@ -1,35 +1,74 @@
-var path = require('path');
 var fs = require('fs');
+var path = require('path');
 var cp = require('child_process');
 var chai = require("chai");
+var should = chai.should();
 var JWebDriver = require('jwebdriver');
 chai.use(JWebDriver.chaiSupportChainPromise);
 
 var rootPath = getRootPath();
-// 初始化一个全局的dol变量(字符串第一个不能是数字)，后面 所有业务测试中需要用来的全局变量 全部定义到8dol下 
-global.dol = {};   
+var appPath = '/Users/caolinming/Desktop/qita/B2Capk/b2c_v3.0.5_2017-05-05.apk';
+var platformName = 'Android';
 
+module.exports = function(){
 
-exports.runThisSpec = function(appPath, testcase){
+    var driver, testVars;
+
+    before(function(){
+        var self = this;
+        driver = self.driver;
+        testVars = self.testVars;
+    });
+
+    it('tap: 123, 1902', async function(){
+        await driver.sendActions('tap', {x: 123, y: 1902});
+    });
+
+    it('tap: 136, 1001', async function(){
+        await driver.sendActions('tap', {x: 136, y: 1001});
+    });
+
+    it('tap: 612, 1166', async function(){
+        await driver.sendActions('tap', {x: 612, y: 1166});
+    });
+
+    it('tap: 732, 115', async function(){
+        await driver.sendActions('tap', {x: 732, y: 115});
+    });
+
+    it('× sendKeys: 瓜子', async function(){
+        await driver.sendKeys(_(`瓜子`));
+    });
+
+    function _(str){
+        if(typeof str === 'string'){
+            return str.replace(/\{\{(.+?)\}\}/g, function(all, key){
+                return testVars[key] || '';
+            });
+        }
+        else{
+            return str;
+        }
+    }
+
+};
+
+if(module.parent && /mocha\.js/.test(module.parent.id)){
+    runThisSpec();
+}
+
+function runThisSpec(){
     // read config
-    var runtime = process.env['runtime'] || '';
-    var config = require(rootPath + '/config'+(runtime?'-'+runtime:'')+'.json');
+    var config = require(rootPath + '/config.json');
     var webdriverConfig = Object.assign({},config.webdriver);
     var host = webdriverConfig.host;
     var port = webdriverConfig.port || 4444;
-    var otherConfig = Object.assign({},config.other);
-    var reuse = otherConfig.reuse;
     var testVars = config.vars;
-    var platformName = /\.apk$/.test(appPath)?'Android':'iOS';
-    // console.log("webdriverConfig: " + webdriverConfig);
-    console.log("app存放路径: " + appPath);
-    console.log("测试系统类型: " + platformName);
 
     var screenshotPath = rootPath + '/screenshots';
     var doScreenshot = fs.existsSync(screenshotPath);
 
     var specName = path.relative(rootPath, __filename).replace(/\\/g,'/').replace(/\.js$/,'');
-
 
     var arrDeviceList = getEnvList() || getDeviceList(platformName);
     if(arrDeviceList.length ===0 ){
@@ -37,8 +76,7 @@ exports.runThisSpec = function(appPath, testcase){
         process.exit(1);
     }
 
-    //支持多设备同时执行
-    arrDeviceList.forEach(function(device){        
+    arrDeviceList.forEach(function(device){
         var caseName = specName + ' : ' + (device.name?device.name+' ['+device.udid+']':device.udid);
 
         if(doScreenshot){
@@ -59,23 +97,15 @@ exports.runThisSpec = function(appPath, testcase){
                     'port': port
                 });
                 self.driver = driver.session({
-                    'reuse': reuse,
                     'platformName': platformName,
                     'udid': device.udid,
-                    'app': /^(\/|[a-z]:\\)/i.test(appPath) ? appPath : rootPath + '/' + appPath
+                    'app': /^(\/|[a-z]:\\|https?:\/\/)/i.test(appPath) ? appPath : rootPath + '/' + appPath
                 });
                 self.testVars = testVars;
-                self.platformName = platformName;
-                //拿不到值
-                getDeviceSize(platformName, function (deviceSize) {
-                    console.log(deviceSize);
-                    console.log('aaa');
-                    self.deviceSize = deviceSize;
-                });
                 return self.driver;
             });
 
-            testcase();
+            module.exports();
 
             afterEach(function(){
                 if(doScreenshot){
@@ -105,8 +135,6 @@ function getRootPath(){
     return rootPath;
 }
 
-exports.rootPath = rootPath;
-
 function mkdirs(dirname){
     if(fs.existsSync(dirname)){
         return true;
@@ -115,6 +143,16 @@ function mkdirs(dirname){
             fs.mkdirSync(dirname);
             return true;
         }
+    }
+}
+
+function callSpec(name){
+    try{
+        require(rootPath + '/' + name)();
+    }
+    catch(e){
+        console.log(e)
+        process.exit(1);
     }
 }
 
@@ -135,7 +173,6 @@ function getDeviceList(platformName){
         // for android
         strText = cp.execSync('adb devices').toString();
         strText.replace(/(.+?)\s+device\r?\n/g, function(all, deviceName){
-        	console.log("android测试设备UDID: " + deviceName);
             arrDeviceList.push({
                 udid: deviceName
             });
@@ -147,8 +184,6 @@ function getDeviceList(platformName){
         strText.replace(/(.+)\r?\n/g, function(all, udid){
             var deviceName = cp.execSync('idevice_id -d '+udid).toString();
             deviceName = deviceName.replace(/\r?\n/g, '');
-        	console.log("IOS测试设备名: " + deviceName);
-            console.log("IOS测试设备UDID: " + udid);
             arrDeviceList.push({
                 name: deviceName,
                 udid: udid
@@ -164,33 +199,5 @@ function getDeviceList(platformName){
         });
     }
     return arrDeviceList;
-}
-
-function getDeviceSize(platformName, callback){
-    var deviceSize = {};
-    var strText, list;
-    if(platformName === 'Android')
-    {
-        // for android
-        strText = cp.execSync('adb shell wm size').toString();
-        console.log(strText);
-        list = strText.match((/\d+/g);
-        console.log(list);
-        console.log('AAA');
-        deviceSize.push({
-            x: list[0],
-            y: list[1]
-        });
-        console.log(deviceSize);
-        });
-    }
-    else{
-        // ios real device
-        deviceSize.push({
-            x: 1080,
-            y: 1920
-        });
-    }
-    callback(deviceSize);
 }
 

@@ -2,7 +2,7 @@
 * @Author: caolinming
 * @Date:   2017-03-23 17:57:03
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-04-25 10:06:36
+* @Last Modified time: 2017-05-05 14:58:57
 * 我的 页
 */
 
@@ -51,20 +51,25 @@ exports.clickIvAvatar = function (){commElem.waitAndClick(minePageUI.IvAvatarPar
 
 //点击: “ 余额 ” 功能入口
 exports.clickBakance = function (){commElem.clickText("余额");};
-exports.testBalance = function (textAffirm){commShould.waitAndEqualAffirm(minePageUI.getBalancePar,textAffirm);};
+// exports.testBalance = function (textAffirm){commShould.waitAndEqualAffirm(minePageUI.getBalancePar,textAffirm);};
+exports.testBalance = function (){commShould.waitAndEqualAccountInfo(minePageUI.getBalancePar,'balance');};
+exports.testBalance2 = function (text){commShould.waitAndEqualAffirm(minePageUI.getBalancePar, text);};
+
+
+
 exports.getBalance = function (){commElem.getAndPrintText(minePageUI.getBalancePar);};
 
 //点击: “ 佣金 ” 功能入口
 exports.clickSalary = function (){commElem.clickText("佣金");};
-exports.testSalary = function (textAffirm){commShould.waitAndEqualAffirm(minePageUI.getSalaryPar,textAffirm);};
+exports.testSalary = function (){commShould.waitAndEqualAccountInfo(minePageUI.getSalaryPar,'salary');};
 
 //点击: “ 天金 ” 功能入口
 exports.clickPoint = function (){commElem.clickText("天金");};
-exports.testPoint = function (textAffirm){commShould.waitAndEqualAffirm(minePageUI.getPointPar,textAffirm);};
+exports.testPoint = function (){commShould.waitAndEqualAccountInfo(minePageUI.getPointPar,'point');};
 
 //点击: “ 校花 ” 功能入口
 exports.clickLoan = function (){commElem.clickText("校花");};
-exports.testLoan = function (textAffirm){commShould.waitAndEqualAffirm(minePageUI.getLoanPar,textAffirm);};
+exports.testLoan = function (){commShould.waitAndEqualAccountInfo(minePageUI.getLoanPar,'loan_balance');};
 
 //点击: “ 夜8 ” 功能入口
 exports.clickYe8 = function (){commElem.clickText("夜8");};

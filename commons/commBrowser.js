@@ -2,7 +2,7 @@
 * @Author: caolinming
 * @Date:   2017-03-24 09:12:34
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-04-25 10:30:06
+* @Last Modified time: 2017-05-12 16:51:57
 * 通用 浏览器或app 操作 方法
 */
 
@@ -11,13 +11,15 @@ var chai = require("chai");
 var should = chai.should();
 var co = require('co');
 
-var driver, testVars, platformName;
+var driver, testVars, platformName, deviceSize;
 
 before(function(){
     var self = this;
     driver = self.driver;
     testVars = self.testVars;
     platformName = self.platformName;  
+    deviceSize = self.deviceSize;
+    console.log(deviceSize);
 });
 
 

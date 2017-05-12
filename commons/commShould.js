@@ -2,7 +2,7 @@
 * @Author: caolinming
 * @Date:   2017-03-24 09:12:34
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-04-25 16:22:57
+* @Last Modified time: 2017-05-08 15:21:27
 * 通用 元素断言 方法
 */
 
@@ -168,7 +168,54 @@ exports.waitAndEqualAffirm = function (parameter,textAffirm){
     var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
     var elementDesc = parameter.elementDesc;
     var waitTime = parameter.waitTime?parameter.waitTime:5000;
+    // console.log(global.userAccountInfo);
     it('等于断言：获取 ' + elementDesc + ' 的值，应等于 ' + textAffirm, function (){
+        if(platformName === 'Android'){
+            return driver.wait(androidElem, waitTime)
+               .text()
+               .should.not.be.a('error')
+               .should.equal(_(textAffirm))
+               .then(text => {console.log('文本值为： ' + text)});             
+        }else{
+            return driver.wait(iosElem, waitTime)
+               .text()
+               .should.not.be.a('error')
+               .should.equal(_(textAffirm))
+               .then(text => {console.log('文本值为： ' + text)});    
+        };
+    });
+};
+
+/*
+ * 等待 对象的出现，获取对象的 text 文本信息，进行 包含 断言
+ * @param androidElem 安卓对应的元素对象的获取方式 及 值 
+ * @param iosElem ios对应的元素对象的获取方式 及 值 
+ * @param elementDesc 控件描述文案
+ * @param waitTime 等待元素对象刷新的 等待时间
+ * @param 金额类型
+ */
+exports.waitAndEqualAccountInfo = function (parameter,type){
+    var androidElem = parameter.androidElem;
+    var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
+    var elementDesc = parameter.elementDesc;
+    var waitTime = parameter.waitTime?parameter.waitTime:5000;
+    var type = type || balance;
+    // console.log(global.userAccountInfo);
+    it('等于断言：获取 ' + elementDesc + ' 的值跟数据库中值一致', function (){
+        switch (type)
+        {
+            case 'balance': var textAffirm = '￥' + global.dol.userAccountInfo.balance.toFixed(2);
+            break;
+            case 'commission': var textAffirm = '￥' + global.dol.userAccountInfo.commission.toFixed(2);
+            break;
+            case 'loan_balance': var textAffirm = '￥' + global.dol.userAccountInfo.loan_balance.toFixed(2);
+            break;
+            case 'salary': var textAffirm = '￥' + global.dol.userAccountInfo.salary.toFixed(2);
+            break;
+            case 'point': var textAffirm = '' + global.dol.userAccountInfo.point;
+            break;
+        };
+        console.log(type);
         if(platformName === 'Android'){
             return driver.wait(androidElem, waitTime)
                .text()

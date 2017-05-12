@@ -7,6 +7,12 @@
     "vars": {
         "aaa": "11111"
     },
+    "datasource": {
+        "host": "172.23.3.85",
+        "user": "8dol",
+        "password": "8dol",
+        "database": "coredb"
+    },
     "recorder": {
         "pathAttrs": "data-id,data-name,type,data-type,role,data-role,data-value",
         "attrValueBlack": "",
