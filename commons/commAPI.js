@@ -2,7 +2,7 @@
 * @Author: caolinming
 * @Date:   2017-05-10 11:28:53
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-05-10 11:40:31
+* @Last Modified time: 2017-05-13 16:22:28
 */
 
 'use strict';
@@ -22,9 +22,9 @@ exports.request = function (options, callback, err) {
 			// console.log('');
 			// console.log(djson.result);
 			// console.log(djson.data.msg);
-			callbck(res.statusCode, djson);
+			callback(res.statusCode, djson);
 	
-		})
+		});
 	});
 
 	req.on('error', (e) => {

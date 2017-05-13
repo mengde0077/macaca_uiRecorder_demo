@@ -2,7 +2,7 @@
 * @Author: caolinming
 * @Date:   2017-03-24 09:12:34
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-05-08 16:33:06
+* @Last Modified time: 2017-05-13 16:31:31
 * 通用 元素操作 方法
 */
 
@@ -34,7 +34,7 @@ exports.waitText = function (text){
             return driver.wait('//*[@text="' + text + '"]', 5000);
         }else{
             return driver.wait('//*[@name="' + text + '"]', 5000);
-        };
+        }
     });
 };
 
@@ -48,7 +48,7 @@ exports.clickText = function (text){
             return driver.wait('//*[@text="' + text + '"]', 10000).sendElementActions('tap');
         }else{
             return driver.wait('//*[@name="' + text + '"]', 5000).sendElementActions('tap');
-        };
+        }
     });
 };
 
@@ -69,7 +69,7 @@ exports.waitElem = function (parameter){
             return driver.wait(androidElem, waitTime);
         }else{
             return driver.wait(iosElem, waitTime);
-        };
+        }
     });
 };
 
@@ -94,7 +94,7 @@ exports.getAndPrintText = function (parameter, callback){
             return driver.wait(iosElem, waitTime).text()
             .then(text => {console.log('文本值为： ' + text);
                 callback(text);});
-        };
+        }
     });
 };
 
@@ -118,7 +118,7 @@ exports.getAndPrintRect = function (parameter){
             return driver.wait(androidElem, waitTime).rect().then(_get_element_rect).then(_print);
         }else{
             return driver.wait(iosElem, waitTime).rect().then(_get_element_rect).then(_print);
-        };
+        }
     });
 };
 
@@ -140,7 +140,7 @@ exports.findAndGetAllName = function (parameter){
             var deferred = Promise.defer();
             co(function * (){
                 var elem =  yield driver.find(androidElem);
-                var length = elem['length'];
+                var length = elem.length;
                 var ep = new eventproxy();
                 // console.log(length);
                 // console.log(ep);
@@ -183,7 +183,7 @@ exports.findAndGetAllName = function (parameter){
                                 
                             }, 300*i);
                         })(i);
-                    };
+                    }
 
                 // for (var i = 0; i < length; i++)
                 //     {
@@ -236,7 +236,7 @@ exports.findAndGetAllName = function (parameter){
             return deferred.promise;
         }else{
             return driver.find(iosElem).then(_print);
-        };
+        }
     });
 };
 
@@ -259,7 +259,7 @@ exports.waitElemDragTo = function (parameter,index,x,y){
             return driver.wait(androidElem, waitTime).get(index).sendActions('drag', { toX: x, toY: y });
         }else{
             return driver.wait(iosElem, waitTime).get(index).sendActions('drag', { toX: x, toY: y });
-        };
+        }
     });
 };
 
@@ -272,16 +272,16 @@ exports.waitElemDragTo = function (parameter,index,x,y){
  */
 exports.waitTextElemAndSwipe = function (text,type,times){
     var waitTime = 5000;
-    var times = times || 1;
-    var type = type || 'up';
-    it('拖拽: 将 ' + text + ' 元素，向' + type + '拖拽' + times + '个自身高度或宽度', function (){
+    var timesL = times || 1;
+    var typeL = type || 'up';
+    it('拖拽: 将 ' + text + ' 元素，向' + typeL + '拖拽' + timesL + '个自身高度或宽度', function (){
         if(platformName === 'Android'){
             return driver.wait('//*[@text="' + text + '"]', waitTime)
                         .rect()
                         .then(_get_element_rect)
                         .then(function(par){
                             // console.log(par);
-                            return _swipeElemByType(par, type, times);
+                            return commBrowser._swipeByType(par, typeL, timesL);
                         });
         }else{
             return driver.wait('//*[@name="' + text + '"]', waitTime)
@@ -289,9 +289,9 @@ exports.waitTextElemAndSwipe = function (text,type,times){
                         .then(_get_element_rect)
                         .then(function(par){
                             // console.log(par);
-                            return _swipeElemByType(par, type, times);
+                            return commBrowser._swipeByType(par, typeL, timesL);
                         });
-        };
+        }
     });
 };
 
@@ -312,27 +312,27 @@ exports.waitElemAndSwipe = function (parameter,type,index,times){
     var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
     var elementDesc = parameter.elementDesc;
     var waitTime = parameter.waitTime?parameter.waitTime:5000;
-    var index = index || 0;
-    var times = times || 1;
-    var type = type || 'up';
-    it('拖拽: 将第 ' + index + ' 个 ' + elementDesc + ' 元素，向' + type + '拖拽' + times + '个自身高度或宽度', function (){
+    var indexL = index || 0;
+    var timesL = times || 1;
+    var typeL = type || 'up';
+    it('拖拽: 将第 ' + indexL + ' 个 ' + elementDesc + ' 元素，向' + typeL + '拖拽' + timesL + '个自身高度或宽度', function (){
         if(platformName === 'Android'){
-            return driver.wait(androidElem, waitTime).get(index)
+            return driver.wait(androidElem, waitTime).get(indexL)
                         .rect()
                         .then(_get_element_rect)
                         .then(function(par){
                             // console.log(par);
-                            return _swipeElemByType(par, type, times);
+                            return commBrowser._swipeByType(par, typeL, timesL);
                         });
         }else{
-            return driver.wait(iosElem, waitTime).get(index)
+            return driver.wait(iosElem, waitTime).get(indexL)
                         .rect()
                         .then(_get_element_rect)
                         .then(function(par){
                             // console.log(par);
-                            return _swipeElemByType(par, type, times);
+                            return commBrowser._swipeByType(par, typeL, timesL);
                         });
-        };
+        }
     });
 };
 
@@ -377,7 +377,7 @@ exports.waitElemAndSwipeLastToFrist = function (parameter){
                             .then(_get_element_rect);
                 _swipeElemLastToFirst(parFirst, parLast);
             });
-        };
+        }
     });
 };
 
@@ -398,7 +398,7 @@ exports.waitAndClick = function (parameter){
             return driver.wait(androidElem, waitTime).sendElementActions('tap');
         }else{
             return driver.wait(iosElem, waitTime).sendElementActions('tap');
-        };
+        }
     });
 };
 
@@ -424,7 +424,7 @@ exports.waitClickAndAjax = function (parameter, text){
             return driver.wait(iosElem, waitTime).sendElementActions('tap')
             .sendKeys(_(text));
             // .submit();
-        };
+        }
     });
 };
 
@@ -449,7 +449,7 @@ exports.waitClickAndSubmit = function (parameter, text){
             return driver.wait(iosElem, waitTime).sendElementActions('tap')
             .sendKeys(_(text))
             .submit();
-        };
+        }
     });
 };
 
@@ -466,13 +466,13 @@ exports.waitAndGetClick = function (parameter,index){
     var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
     var elementDesc = parameter.elementDesc;
     var waitTime = parameter.waitTime?parameter.waitTime:5000;
-    var index = index || 0;
+    var indexl = index || 0;
     it('点击: ' + elementDesc, function (){
         if(platformName === 'Android'){
-            return driver.wait(androidElem, waitTime).get(index).sendElementActions('tap');
+            return driver.wait(androidElem, waitTime).get(indexl).sendElementActions('tap');
         }else{
             return driver.wait(iosElem, waitTime).sendElementActions('tap');
-        };
+        }
     });
 };
 
@@ -485,23 +485,23 @@ exports.waitAndGetClick = function (parameter,index){
  * @param waitTime 等待元素对象刷新的 等待时间
  * @param index 列表元素对象的 序号，从 0 开始
  */
-exports.waitAndGetClick1 = function (parameter,name,parameter2){
-    var androidElem = parameter.androidElem;
-    var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
-    var elementDesc = parameter.elementDesc;
-    var waitTime = parameter.waitTime?parameter.waitTime:5000;
-    var androidElem2 = parameter2.androidElem;
-    var iosElem2 = parameter2.iosElem?parameter2.iosElem:parameter2.androidElem; //如果没有传ios的默认使用Android的
-    var elementDesc2 = parameter2.elementDesc;
-    it('点击: ' + elementDesc, function (){
+// exports.waitAndGetClick1 = function (parameter,name,parameter2){
+//     var androidElem = parameter.androidElem;
+//     var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
+//     var elementDesc = parameter.elementDesc;
+//     var waitTime = parameter.waitTime?parameter.waitTime:5000;
+//     var androidElem2 = parameter2.androidElem;
+//     var iosElem2 = parameter2.iosElem?parameter2.iosElem:parameter2.androidElem; //如果没有传ios的默认使用Android的
+//     var elementDesc2 = parameter2.elementDesc;
+//     it('点击: ' + elementDesc, function (){
 
-        if(platformName === 'Android'){
-            return driver.wait(androidElem, waitTime).get(index).sendElementActions('tap');
-        }else{
-            return driver.wait(iosElem, waitTime).sendElementActions('tap');
-        };
-    });
-};
+//         if(platformName === 'Android'){
+//             return driver.wait(androidElem, waitTime).get(index).sendElementActions('tap');
+//         }else{
+//             return driver.wait(iosElem, waitTime).sendElementActions('tap');
+//         }
+//     });
+// };
 
 /*
  * 等待 对象的出现，并双击 该对象 进行操作或跳转！
@@ -520,7 +520,7 @@ exports.waitAndDoubleClick = function (parameter){
             return driver.wait(androidElem, waitTime).sendElementActions('doubleTap');
         }else{
             return driver.wait(iosElem, waitTime).sendElementActions('doubleTap');
-        };
+        }
     });
 };
 
@@ -542,7 +542,7 @@ exports.pinchIn = function (parameter){
             return driver.wait(androidElem, waitTime).sendActions('pinch', { direction: "in", percent: 50 });
         }else{
             return driver.wait(iosElem, waitTime).sendActions('pinch', { scale: 2 });
-        };
+        }
     });
 };
 
@@ -563,7 +563,7 @@ exports.pinchIn = function (parameter){
             return driver.wait(androidElem, waitTime).sendActions('pinch', { direction: "out", percent: 200 });
         }else{
             return driver.wait(iosElem, waitTime).sendActions('pinch', { velocity: 1 });
-        };
+        }
     });
 };
 
@@ -584,91 +584,91 @@ exports.waitAndLongClick = function (parameter){
             return driver.wait(androidElem, waitTime).sendActions('press');
         }else{
             return driver.wait(iosElem, waitTime).sendActions('press');
-        };
+        }
     });
 };
 
-/*
- * 等待 对象的出现 ,向指定 方向 拖拽  
- * @param par 元素的坐标信息
- * @param type 滑动的方向 'up'、down'、'right'、'left'
- * @param times 元素的位标
- */
-function _swipeElemByType(par, type, times){
-    var times = times || 1;
-    var type = type || 'up';
-    switch (type)
-    {
-        case 'up': _swipeElemUp(par, times);
-        break;
-        case 'down': _swipeElemDown(par, times);
-        break;
-        case 'right': _swipeElemRight(par, times);
-        break;
-        case 'left': _swipeElemLeft(par, times);
-        break;
-    };
-};
+// /*
+//  * 等待 对象的出现 ,向指定 方向 拖拽  
+//  * @param par 元素的坐标信息
+//  * @param type 滑动的方向 'up'、down'、'right'、'left'
+//  * @param times 元素的位标
+//  */
+// function _swipeElemByType(par, type, times){
+//     var times = times || 1;
+//     var type = type || 'up';
+//     switch (type)
+//     {
+//         case 'up': _swipeElemUp(par, times);
+//         break;
+//         case 'down': _swipeElemDown(par, times);
+//         break;
+//         case 'right': _swipeElemRight(par, times);
+//         break;
+//         case 'left': _swipeElemLeft(par, times);
+//         break;
+//     }
+// }
 
-/*
- * 滑屏函数，以元素底部中心坐标，向上拖拽自身的高度
- * @param fromX,fromY 起点的x/y坐标
- * @param toX,toY 终点的x/y坐标
- * @param times  滑动距离是 高度的 times 倍
- */
-function _swipeElemUp(par, times){
-    var times = times || 1;
-    var fromX = par.x_center;
-    var fromY = par.y_down;
-    var toX = par.x_center;
-    var toY = par.y_down - par.height * times;
-    commBrowser.swipe(fromX, fromY, toX, toY);
-};
+// /*
+//  * 滑屏函数，以元素底部中心坐标，向上拖拽自身的高度
+//  * @param fromX,fromY 起点的x/y坐标
+//  * @param toX,toY 终点的x/y坐标
+//  * @param times  滑动距离是 高度的 times 倍
+//  */
+// function _swipeElemUp(par, times){
+//     var times = times || 1;
+//     var fromX = par.x_center;
+//     var fromY = par.y_down;
+//     var toX = par.x_center;
+//     var toY = par.y_down - par.height * times;
+//     commBrowser.swipe(fromX, fromY, toX, toY);
+// }
 
-/*
- * 滑屏函数，以元素顶部中心坐标，向下拖拽自身的高度
- * @param fromX,fromY 起点的x/y坐标
- * @param toX,toY 终点的x/y坐标
- * @param times  滑动距离是 高度的 times 倍
- */
-function _swipeElemDown(par, times){
-    var times = times || 1;
-    var fromX = par.x_center;
-    var fromY = par.y_up;
-    var toX = par.x_center;
-    var toY = par.y_up + par.height * times;
-    commBrowser.swipe(fromX, fromY, toX, toY);
-};
+// /*
+//  * 滑屏函数，以元素顶部中心坐标，向下拖拽自身的高度
+//  * @param fromX,fromY 起点的x/y坐标
+//  * @param toX,toY 终点的x/y坐标
+//  * @param times  滑动距离是 高度的 times 倍
+//  */
+// function _swipeElemDown(par, times){
+//     var times = times || 1;
+//     var fromX = par.x_center;
+//     var fromY = par.y_up;
+//     var toX = par.x_center;
+//     var toY = par.y_up + par.height * times;
+//     commBrowser.swipe(fromX, fromY, toX, toY);
+// }
 
-/*
- * 滑屏函数，以元素左边中心坐标，向右拖拽自身的宽度
- * @param fromX,fromY 起点的x/y坐标
- * @param toX,toY 终点的x/y坐标
- * @param times  滑动距离是 宽度的 times 倍
- */
-function _swipeElemRight(par, times){
-    var times = times || 1;
-    var fromX = par.x_left;
-    var fromY = par.y_center;
-    var toX = par.x_left + par.width * times;
-    var toY = par.y_center;
-    commBrowser.swipe(fromX, fromY, toX, toY);
-};
+// /*
+//  * 滑屏函数，以元素左边中心坐标，向右拖拽自身的宽度
+//  * @param fromX,fromY 起点的x/y坐标
+//  * @param toX,toY 终点的x/y坐标
+//  * @param times  滑动距离是 宽度的 times 倍
+//  */
+// function _swipeElemRight(par, times){
+//     var times = times || 1;
+//     var fromX = par.x_left;
+//     var fromY = par.y_center;
+//     var toX = par.x_left + par.width * times;
+//     var toY = par.y_center;
+//     commBrowser.swipe(fromX, fromY, toX, toY);
+// }
 
-/*
- * 滑屏函数，以元素右边中心坐标，向左拖拽自身的宽度
- * @param fromX,fromY 起点的x/y坐标
- * @param toX,toY 终点的x/y坐标
- * @param times  滑动距离是 宽度的 times 倍
- */
-function _swipeElemLeft(par, times){
-    var times = times || 1;
-    var fromX = par.x_right;
-    var fromY = par.y_center;
-    var toX = par.x_right - par.width * times;
-    var toY = par.y_center;
-    commBrowser.swipe(fromX, fromY, toX, toY);
-};
+// /*
+//  * 滑屏函数，以元素右边中心坐标，向左拖拽自身的宽度
+//  * @param fromX,fromY 起点的x/y坐标
+//  * @param toX,toY 终点的x/y坐标
+//  * @param times  滑动距离是 宽度的 times 倍
+//  */
+// function _swipeElemLeft(par, times){
+//     var times = times || 1;
+//     var fromX = par.x_right;
+//     var fromY = par.y_center;
+//     var toX = par.x_right - par.width * times;
+//     var toY = par.y_center;
+//     commBrowser.swipe(fromX, fromY, toX, toY);
+// }
 
 /*
  * 滑屏函数，从列表的最后一个元素滑动到最前一个元素的位置
@@ -682,7 +682,7 @@ function _swipeElemLastToFirst(parFirst, parLast){
     var toX = parFirst.x_center;
     var toY = parFirst.y_center;
     commBrowser.swipe(fromX, fromY, toX, toY, 50);
-};
+}
 
 /*
  * 获取元素对象的信息，返回坐标信息
@@ -693,14 +693,14 @@ function _swipeElemLastToFirst(parFirst, parLast){
  */
 function _get_element_rect(rect) {
         var x_center,y_center,x_left,y_up,x_right,y_down,width,height;
-        x_center = rect['x'] + rect['width'] / 2;
-        y_center = rect['y'] + rect['height'] / 2;
-        x_left = rect['x'];
-        y_up = rect['y'];
-        x_right = rect['x'] + rect['width'];
-        y_down = rect['y'] + rect['height'];
-        width = rect['width'];
-        height = rect['height'];
+        x_center = rect.x + rect.width / 2;
+        y_center = rect.y + rect.height / 2;
+        x_left = rect.x;
+        y_up = rect.y;
+        x_right = rect.x + rect.width;
+        y_down = rect.y + rect.height;
+        width = rect.width;
+        height = rect.height;
         var par = {
             x_center: x_center,
             y_center: y_center,
@@ -712,7 +712,7 @@ function _get_element_rect(rect) {
             height: height
         };
         return par;
-};
+}
 
 /*
  * 获取 并打印 then 捕获的值

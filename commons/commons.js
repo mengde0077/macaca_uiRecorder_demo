@@ -12,7 +12,7 @@ global.dol = {};
 
 exports.runThisSpec = function(appPath, testcase){
     // read config
-    var runtime = process.env['runtime'] || '';
+    var runtime = process.env.runtime || '';
     var config = require(rootPath + '/config'+(runtime?'-'+runtime:'')+'.json');
     var webdriverConfig = Object.assign({},config.webdriver);
     var host = webdriverConfig.host;
@@ -38,7 +38,7 @@ exports.runThisSpec = function(appPath, testcase){
     }
 
     //支持多设备同时执行
-    arrDeviceList.forEach(function(device){        
+    arrDeviceList.forEach(function(device, index){        
         var caseName = specName + ' : ' + (device.name?device.name+' ['+device.udid+']':device.udid);
 
         if(doScreenshot){
@@ -66,11 +66,10 @@ exports.runThisSpec = function(appPath, testcase){
                 });
                 self.testVars = testVars;
                 self.platformName = platformName;
-                //拿不到值
                 getDeviceSize(platformName, function (deviceSize) {
-                    console.log(deviceSize);
-                    console.log('aaa');
-                    self.deviceSize = deviceSize;
+                    // console.log(deviceSize);
+                    // console.log('aaa');
+                    self.deviceSize = deviceSize[index];
                 });
                 return self.driver;
             });
@@ -92,7 +91,7 @@ exports.runThisSpec = function(appPath, testcase){
 
         });
     });
-}
+};
 
 function getRootPath(){
     var rootPath = path.resolve(__dirname);
@@ -167,22 +166,22 @@ function getDeviceList(platformName){
 }
 
 function getDeviceSize(platformName, callback){
-    var deviceSize = {};
+    var deviceSize = [];
     var strText, list;
     if(platformName === 'Android')
     {
-        // for android
+        // 对于多台设备  应该是有缺陷的
         strText = cp.execSync('adb shell wm size').toString();
-        console.log(strText);
-        list = strText.match((/\d+/g);
-        console.log(list);
-        console.log('AAA');
+        // console.log(strText);
+        list = strText.match(/\d+/g);
+        // console.log(list);
+        // console.log('AAA');
+        //push 是list的方法
         deviceSize.push({
             x: list[0],
             y: list[1]
         });
-        console.log(deviceSize);
-        });
+        // console.log(deviceSize);
     }
     else{
         // ios real device

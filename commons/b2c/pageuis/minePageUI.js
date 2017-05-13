@@ -2,13 +2,14 @@
 * @Author: caolinming
 * @Date:   2017-04-02 10:13:24
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-04-24 17:35:27
+* @Last Modified time: 2017-05-13 16:03:36
 */
 
 'use strict';
 var chai = require("chai");
 var should = chai.should();
-
+var commElem = require("../../commElem");
+var _ = commElem._;
 
 var driver, testVars, platformName;
 
@@ -44,7 +45,7 @@ exports.login = function (userName, password){
                 .sendKeys(_(password))
                 .wait('//*[@name="登  录"]', 30000).sendElementActions('tap')
                 ;            
-        };
+        }
     });  
 };
 

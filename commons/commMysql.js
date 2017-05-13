@@ -2,16 +2,15 @@
 * @Author: caolinming
 * @Date:   2017-05-02 10:17:13
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-05-02 15:34:14
+* @Last Modified time: 2017-05-13 16:29:07
 */
 
 'use strict';
 var mysql = require('mysql');
 var commons = require('./commons');
-var self = this;
 var db = {};
 
-var runtime = process.env['runtime'] || '';
+var runtime = process.env.runtime || '';
 var rootPath = commons.rootPath;
 var config = require(rootPath + '/config'+(runtime?'-'+runtime:'')+'.json');
 var datasourceConfig = Object.assign({},config.datasource);
@@ -50,16 +49,16 @@ db.query = function(sql, values, callback){
 		callback();
 		return;
 	}
-	var values = values || undefined;
-	connection.query(sql, values, function(err, rows, fields){
+	var valuesL = values || undefined;
+	connection.query(sql, valuesL, function(err, rows, fields){
 		if(err){
 			console.log(err);
 			callback(err, null);
 			return;
-		};
+		}
 
 		callback(null, rows, fields);
 	});
-}
+};
 
 module.exports = db;

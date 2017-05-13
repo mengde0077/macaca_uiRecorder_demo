@@ -2,13 +2,12 @@
 * @Author: caolinming
 * @Date:   2017-05-02 10:39:47
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-05-08 15:21:16
+* @Last Modified time: 2017-05-13 16:04:38
 */
 
 'use strict';
 
 var db = require('../commMysql');
-var self = this;
 
 exports.userCount = function (){
 	var elementDesc = '查询用户数量';

@@ -14,7 +14,12 @@
     "mysql": "^2.13.0",
     "selenium-standalone": "6.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-jshint": "^1.1.0",
+    "jshint": "^2.9.4"
+  },
   "scripts": {
     "installdriver": "./node_modules/.bin/selenium-standalone install --drivers.firefox.baseURL=http://npm.taobao.org/mirrors/geckodriver --baseURL=http://npm.taobao.org/mirrors/selenium --drivers.chrome.baseURL=http://npm.taobao.org/mirrors/chromedriver --drivers.ie.baseURL=http://npm.taobao.org/mirrors/selenium",
     "server": "./node_modules/.bin/selenium-standalone start",

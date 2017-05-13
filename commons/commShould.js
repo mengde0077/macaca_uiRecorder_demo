@@ -2,7 +2,7 @@
 * @Author: caolinming
 * @Date:   2017-03-24 09:12:34
 * @Last Modified by:   caolinming
-* @Last Modified time: 2017-05-08 15:21:27
+* @Last Modified time: 2017-05-13 16:21:32
 * 通用 元素断言 方法
 */
 
@@ -41,7 +41,7 @@ exports.shouldElemIsEnabled = function (parameter){
         }else{
             return driver.find(iosElem, waitTime).enabled()
                         .should.be.true;
-        };
+        }
     });
 };
 
@@ -64,7 +64,7 @@ exports.shouldElemIsNotEnabled = function (parameter){
         }else{
             return driver.find(iosElem, waitTime).enabled()
                         .should.be.false;
-        };
+        }
     });
 };
 
@@ -88,7 +88,7 @@ exports.shouldElemIsSelected = function (parameter){
         }else{
             return driver.find(iosElem, waitTime).selected()
                         .should.be.true;
-        };
+        }
     });
 };
 
@@ -111,7 +111,7 @@ exports.shouldElemIsNotSelected = function (parameter){
         }else{
             return driver.find(iosElem, waitTime).selected()
                         .should.be.false;
-        };
+        }
     });
 };
 
@@ -131,7 +131,7 @@ exports.elemCanNotFind = function (textAffirm){
         }else{
             return driver.find('//*[@name="' + textAffirm + '"]')
                 .should.is.empty;
-        };
+        }
     });
 };
 
@@ -151,7 +151,7 @@ exports.elemCanFind = function (textAffirm){
         }else{
             return driver.find('//*[@name="' + textAffirm + '"]')
                 .should.is.not.empty;
-        };
+        }
     });
 };
 
@@ -175,14 +175,14 @@ exports.waitAndEqualAffirm = function (parameter,textAffirm){
                .text()
                .should.not.be.a('error')
                .should.equal(_(textAffirm))
-               .then(text => {console.log('文本值为： ' + text)});             
+               .then(text => {console.log('文本值为： ' + text);});             
         }else{
             return driver.wait(iosElem, waitTime)
                .text()
                .should.not.be.a('error')
                .should.equal(_(textAffirm))
-               .then(text => {console.log('文本值为： ' + text)});    
-        };
+               .then(text => {console.log('文本值为： ' + text);});    
+        }
     });
 };
 
@@ -199,36 +199,37 @@ exports.waitAndEqualAccountInfo = function (parameter,type){
     var iosElem = parameter.iosElem?parameter.iosElem:parameter.androidElem; //如果没有传ios的默认使用Android的
     var elementDesc = parameter.elementDesc;
     var waitTime = parameter.waitTime?parameter.waitTime:5000;
-    var type = type || balance;
+    var typeL = type || 'balance';
+    var textAffirm;
     // console.log(global.userAccountInfo);
     it('等于断言：获取 ' + elementDesc + ' 的值跟数据库中值一致', function (){
-        switch (type)
+        switch (typeL)
         {
-            case 'balance': var textAffirm = '￥' + global.dol.userAccountInfo.balance.toFixed(2);
+            case 'balance': textAffirm = '￥' + global.dol.userAccountInfo.balance.toFixed(2);
             break;
-            case 'commission': var textAffirm = '￥' + global.dol.userAccountInfo.commission.toFixed(2);
+            case 'commission': textAffirm = '￥' + global.dol.userAccountInfo.commission.toFixed(2);
             break;
-            case 'loan_balance': var textAffirm = '￥' + global.dol.userAccountInfo.loan_balance.toFixed(2);
+            case 'loan_balance': textAffirm = '￥' + global.dol.userAccountInfo.loan_balance.toFixed(2);
             break;
-            case 'salary': var textAffirm = '￥' + global.dol.userAccountInfo.salary.toFixed(2);
+            case 'salary': textAffirm = '￥' + global.dol.userAccountInfo.salary.toFixed(2);
             break;
-            case 'point': var textAffirm = '' + global.dol.userAccountInfo.point;
+            case 'point': textAffirm = '' + global.dol.userAccountInfo.point;
             break;
-        };
-        console.log(type);
+        }
+        console.log(typeL);
         if(platformName === 'Android'){
             return driver.wait(androidElem, waitTime)
                .text()
                .should.not.be.a('error')
                .should.equal(_(textAffirm))
-               .then(text => {console.log('文本值为： ' + text)});             
+               .then(text => {console.log('文本值为： ' + text);});             
         }else{
             return driver.wait(iosElem, waitTime)
                .text()
                .should.not.be.a('error')
                .should.equal(_(textAffirm))
-               .then(text => {console.log('文本值为： ' + text)});    
-        };
+               .then(text => {console.log('文本值为： ' + text);});    
+        }
     });
 };
 
@@ -250,12 +251,12 @@ exports.shouldElemIsShecked = function (parameter){
         if(platformName === 'Android'){
             return driver.wait(androidElem, waitTime).prop('checked')
             .should.deep.equal({ checked: true })
-            .then(text => {console.log(text)});  //打印在控制台
+            .then(text => {console.log(text);});  //打印在控制台
         }else{
             return driver.wait(androidElem, waitTime).prop('checked')
             .should.deep.equal({ checked: true })
-            .then(text => {console.log(text)});  //打印在控制台
-        };
+            .then(text => {console.log(text);});  //打印在控制台
+        }
     });
 };
 
@@ -277,12 +278,12 @@ exports.shouldElemIsNotShecked = function (parameter){
         if(platformName === 'Android'){
             return driver.wait(androidElem, waitTime).prop('checked')
             .should.deep.equal({ checked: false })
-            .then(text => {console.log(text)});  //打印在控制台
+            .then(text => {console.log(text);});  //打印在控制台
         }else{
             return driver.wait(androidElem, waitTime).prop('checked')
             .should.deep.equal({ checked: false })
-            .then(text => {console.log(text)});  //打印在控制台
-        };
+            .then(text => {console.log(text);});  //打印在控制台
+        }
     });
 };
 
@@ -308,7 +309,7 @@ exports.shouldElemLenEqual = function (parameter, N){
         }else{
             return driver.find(androidElem)
             .should.have.length(N);
-        };
+        }
     });
 };
 
@@ -332,7 +333,7 @@ exports.shouldElemLenAbove = function (parameter, N){
         }else{
             return driver.find(androidElem)
             .should.have.length.above(N);
-        };
+        }
     });
 };
 
